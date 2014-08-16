@@ -98,6 +98,7 @@ class cache_page(object):
             key = get_cache_key(request)
             debug("Retrievable.")
             cached = cache.get(key)
+
             if cached is not None:
                 debug("serving from cache")
                 res = HttpResponse(cached)
@@ -109,7 +110,8 @@ class cache_page(object):
             if response_is_cacheable(request, response):
                 debug("storing!")
                 cache.set(key, response.content, self.time)
-                response["ETag"] = key
+                if cache.has_key(key): #make sure cache is working before setting ETag
+                    response["ETag"] = key
             else:
                 debug("Not storable.")
             return response 
