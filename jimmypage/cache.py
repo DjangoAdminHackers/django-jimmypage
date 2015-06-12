@@ -34,7 +34,6 @@ DEBUG_CACHE = getattr(settings, 'JIMMY_PAGE_DEBUG_CACHE', False)
 GLOBAL_GENERATION = CACHE_PREFIX + "_gen"
 
 def clear_cache():
-    debug("###### Incrementing Generation")
     try:
         cache.incr(GLOBAL_GENERATION)
     except ValueError:
