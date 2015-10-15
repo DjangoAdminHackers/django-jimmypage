@@ -108,7 +108,9 @@ class cache_page(object):
             response = self.f(request, *args, **kwargs)
             if response_is_cacheable(request, response):
                 debug("storing!")
-                cache.set(key, response.content, self.time)
+                # Template responses must be rendered
+                content = getattr(response, 'rendered_content', None) or response.content
+                cache.set(key, content, self.time)
                 if cache.has_key(key): #make sure cache is working before setting ETag
                     response["ETag"] = key
             else:
