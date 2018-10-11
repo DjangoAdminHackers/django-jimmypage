@@ -160,7 +160,7 @@ def response_is_cacheable(request, response):
 
 if DEBUG_CACHE:
     def debug(*args):
-        print "JIMMYPAGE: " + " ".join([str(a) for a in args])
+        print("JIMMYPAGE: " + " ".join([str(a) for a in args]))
 else:
     def debug(*args):
         pass
