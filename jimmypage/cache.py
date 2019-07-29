@@ -15,6 +15,7 @@ from django.http import HttpResponse
 from django.utils import translation
 from django.utils.encoding import iri_to_uri
 from django.utils.http import urlencode
+import collections
 
 __all__ = ('cache_page', 'clear_cache')
 
@@ -64,7 +65,7 @@ class cache_page(object):
 
     """
     def __init__(self, arg=None):
-        if callable(arg):
+        if isinstance(arg, collections.Callable):
             # we are called with a function as argument; e.g., as a bare
             # decorator.  __call__ should be the new decorated function.
             self.time = CACHE_SECONDS
@@ -111,7 +112,7 @@ class cache_page(object):
                 # Template responses must be rendered
                 content = getattr(response, 'rendered_content', None) or response.content
                 cache.set(key, content, self.time)
-                if cache.has_key(key): #make sure cache is working before setting ETag
+                if key in cache: #make sure cache is working before setting ETag
                     response["ETag"] = key
             else:
                 debug("Not storable.")
@@ -137,7 +138,7 @@ def get_cache_key(request):
         user_id,
     ]
     suffix_function = getattr(settings, 'JIMMY_PAGE_SUFFIX_FUNCTION', None)
-    if suffix_function and callable(suffix_function):
+    if suffix_function and isinstance(suffix_function, collections.Callable):
         part = suffix_function(request)
         if part:
             key_parts.append(part)
@@ -160,7 +161,7 @@ def response_is_cacheable(request, response):
 
 if DEBUG_CACHE:
     def debug(*args):
-        print("JIMMYPAGE: " + " ".join([str(a) for a in args]))
+        print(("JIMMYPAGE: " + " ".join([str(a) for a in args])))
 else:
     def debug(*args):
         pass
