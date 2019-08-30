@@ -124,7 +124,7 @@ class cache_page(object):
 def get_cache_key(request):
     user_id = "" 
     try:
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             user_id = str(request.user.id)
     except AttributeError: # e.g. if auth is not installed
         pass
