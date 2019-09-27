@@ -145,7 +145,8 @@ def get_cache_key(request):
     key = "/".join(key_parts)
 
     debug(key)
-    return md5(key).hexdigest()
+    return md5(key.encode()).hexdigest()
+
 
 def request_is_cacheable(request):
     return (not DISABLED) and \
